@@ -28,10 +28,10 @@ public class UI {
         mainPanel.setBorder(new EmptyBorder(20, 20, 20, 20));
         frame.add(mainPanel);
         
-        textField = new JTextField();
-        textField.setFont(new Font("Arial", Font.BOLD, 28));
+        textField = new JTextField(); // Display
+        textField.setFont(new Font("Arial", Font.BOLD, 28)); // ตั้งค่าหน้าจอ
         textField.setHorizontalAlignment(JTextField.RIGHT);
-        textField.setEditable(false);
+        textField.setEditable(false); //กดได้แค่ปุ่ม ไม่สามารถพิมพ์จากแป้นพิมพ์ได้
         textField.setPreferredSize(new Dimension(0, 70));
         mainPanel.add(textField, BorderLayout.NORTH);
         
