@@ -1,32 +1,43 @@
 import javax.swing.*;
-import javax.swing.border.EmptyBorder; // สำหรับทำระยะห่างขอบ
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
 public class UI {
-    public static void main(String[] args) {
-        // 1. สร้างหน้าต่างหลัก
-        JFrame frame = new JFrame("Simple Calculator");
-        frame.setSize(400, 550); // ปรับขนาดให้โปร่งขึ้น
+
+    private Logic logic;
+    private JFrame frame;
+    private JTextField textField;
+
+    private double firstValue = 0;
+    private String operator = "";
+
+    public UI(Logic logic) {
+        this.logic = logic;
+        createUI();
+    }
+
+    public void show() {
+        frame.setVisible(true);
+    }
+
+    private void createUI() {
+        frame = new JFrame("Simple Calculator");
+        frame.setSize(400, 550);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        
-        // ใช้ JPanel หลักพร้อมระยะห่างขอบ 20px รอบด้าน
-        JPanel mainPanel = new JPanel(new BorderLayout(10, 20)); 
-        mainPanel.setBorder(new EmptyBorder(20, 20, 20, 20)); 
+
+        JPanel mainPanel = new JPanel(new BorderLayout(10, 20));
+        mainPanel.setBorder(new EmptyBorder(20, 20, 20, 20));
         frame.add(mainPanel);
 
-        // 2. ส่วนแสดงผล (TextField)
-        JTextField textField = new JTextField();
+        textField = new JTextField();
         textField.setFont(new Font("Arial", Font.BOLD, 28));
         textField.setHorizontalAlignment(JTextField.RIGHT);
         textField.setEditable(false);
-        textField.setPreferredSize(new Dimension(0, 70)); // เพิ่มความสูงช่องแสดงผล
+        textField.setPreferredSize(new Dimension(0, 70));
         mainPanel.add(textField, BorderLayout.NORTH);
 
-        // 3. ส่วนของปุ่ม (Panel) ใช้ GridLayout 4x4 พร้อมระยะห่างระหว่างปุ่ม 15px
-        JPanel buttonPanel = new JPanel();
-        buttonPanel.setLayout(new GridLayout(4, 4, 15, 15)); 
+        JPanel buttonPanel = new JPanel(new GridLayout(4, 4, 15, 15));
 
-        // รายการปุ่มเรียงตามรูปแบบที่คุณต้องการ
         String[] buttons = {
             "7", "8", "9", "/",
             "4", "5", "6", "*",
@@ -37,30 +48,37 @@ public class UI {
         for (String text : buttons) {
             JButton btn = new JButton(text);
             btn.setFont(new Font("Arial", Font.BOLD, 20));
-            btn.setFocusPainted(false); // ลบเส้นขอบเวลาโฟกัสปุ่ม
-            
-            // ใส่เฉพาะการแสดงผลตัวเลขเบื้องต้น (ลบ Logic การคำนวณออกแล้ว)
-            btn.addActionListener(e -> {
-                String cmd = e.getActionCommand();
-                if (cmd.equals("C")) {
-                    textField.setText("");
-                } else if (cmd.equals("=")) {
-                    // รอเชื่อมต่อ Logic จากสมาชิกกลุ่มคนอื่น
-                    System.out.println("Input received: " + textField.getText());
-                } else {
-                    if ("+-*/%".contains(cmd)) {
-                        textField.setText(textField.getText() + " " + cmd + " ");
-                    } else {
-                        textField.setText(textField.getText() + cmd);
-                    }
-                }
-            });
+
+            btn.addActionListener(e -> handleButton(e.getActionCommand()));
             buttonPanel.add(btn);
         }
 
         mainPanel.add(buttonPanel, BorderLayout.CENTER);
-        
-        // สั่งให้หน้าต่างแสดงผล
-        frame.setVisible(true);
+    }
+
+    private void handleButton(String cmd) {
+        if (cmd.equals("C")) {
+            textField.setText("");
+            logic.reset();
+            operator = "";
+        }
+        else if ("+-*/%".contains(cmd)) {
+            firstValue = Double.parseDouble(textField.getText());
+            operator = cmd;
+            textField.setText("");
+        }
+        else if (cmd.equals("=")) {
+            double secondValue = Double.parseDouble(textField.getText());
+
+            logic.setFirstValue(firstValue);
+            logic.setOperator(operator);
+            logic.setSecondValue(secondValue);
+
+            double result = logic.calculate();
+            textField.setText(String.valueOf(result));
+        }
+        else {
+            textField.setText(textField.getText() + cmd);
+        }
     }
 }
