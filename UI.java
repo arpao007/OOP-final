@@ -4,17 +4,17 @@ import java.awt.*;
 
 public class UI {
     public static void main(String[] args) {
-        // 1. สร้างหน้าต่างหลัก
+        // สร้างหน้าต่างหลัก
         JFrame frame = new JFrame("Simple Calculator");
         frame.setSize(400, 550); // ปรับขนาดให้โปร่งขึ้น
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
         // ใช้ JPanel หลักพร้อมระยะห่างขอบ 20px รอบด้าน
-        JPanel mainPanel = new JPanel(new BorderLayout(10, 20)); 
-        mainPanel.setBorder(new EmptyBorder(20, 20, 20, 20)); 
+        JPanel mainPanel = new JPanel(new BorderLayout(10, 20));
+        mainPanel.setBorder(new EmptyBorder(20, 20, 20, 20));
         frame.add(mainPanel);
 
-        // 2. ส่วนแสดงผล (TextField)
+        // ส่วนแสดงผล
         JTextField textField = new JTextField();
         textField.setFont(new Font("Arial", Font.BOLD, 28));
         textField.setHorizontalAlignment(JTextField.RIGHT);
@@ -22,11 +22,11 @@ public class UI {
         textField.setPreferredSize(new Dimension(0, 70)); // เพิ่มความสูงช่องแสดงผล
         mainPanel.add(textField, BorderLayout.NORTH);
 
-        // 3. ส่วนของปุ่ม (Panel) ใช้ GridLayout 4x4 พร้อมระยะห่างระหว่างปุ่ม 15px
+        // ส่วนของปุ่ม
         JPanel buttonPanel = new JPanel();
-        buttonPanel.setLayout(new GridLayout(4, 4, 15, 15)); 
+        buttonPanel.setLayout(new GridLayout(4, 4, 15, 15));
 
-        // รายการปุ่มเรียงตามรูปแบบที่คุณต้องการ
+        //เรียงปุ่ม
         String[] buttons = {
             "7", "8", "9", "/",
             "4", "5", "6", "*",
@@ -39,7 +39,7 @@ public class UI {
             btn.setFont(new Font("Arial", Font.BOLD, 20));
             btn.setFocusPainted(false); // ลบเส้นขอบเวลาโฟกัสปุ่ม
             
-            // ใส่เฉพาะการแสดงผลตัวเลขเบื้องต้น (ลบ Logic การคำนวณออกแล้ว)
+            // การแสดงผลตัวเลขเบื้องต้น 
             btn.addActionListener(e -> {
                 String cmd = e.getActionCommand();
                 if (cmd.equals("C")) {
